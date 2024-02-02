@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
@@ -21,6 +22,8 @@ public class Player : MonoBehaviour
     public GameObject Shadow;
     public GameObject Temp;
     public bool CanTeleport = true;
+    public Image ShadowCDBar;
+    public int ShadowCDTimer = 5;
 
     public SpriteRenderer PlayerSprite;
     public bool CanInvis = true;
@@ -29,12 +32,11 @@ public class Player : MonoBehaviour
 
     private void Start()
     {
-        
         rb = GetComponent<Rigidbody2D>();
         Anim = GetComponent<Animator>();
     }
     void Update()
-    { 
+    {
         horizontal = Input.GetAxisRaw("Horizontal");
         vertical = Input.GetAxisRaw("Vertical");
         Shoot();
@@ -120,24 +122,39 @@ public class Player : MonoBehaviour
     }
     IEnumerator ShadowTele()
     {
-        yield return new WaitForSeconds(2.5f);
+        yield return new WaitForSeconds(ShadowCDTimer);
         gameObject.transform.position = Temp.transform.position;
         Destroy(Temp.gameObject);
+        StartCoroutine(ShadowTeleCD());
+    }
+    IEnumerator ShadowTeleCD()
+    {
+
+        yield return new WaitForSeconds(ShadowCDTimer);
+        CanTeleport = true;
     }
     IEnumerator InvisCD()
     {
-        
         yield return new WaitForSeconds(5);
         CanInvis = true;
     }
     
     private void Teleport()//For Player to Teleport
     {
-        if (Input.GetKeyDown(KeyCode.Q))
+        if (CanTeleport)
         {
-             Temp = Instantiate(Shadow, BulletSpawnpoint.transform.position, Quaternion.identity);
-            StartCoroutine(ShadowTele());
+            if (Input.GetKeyDown(KeyCode.Q))
+            {
+                Temp = Instantiate(Shadow, BulletSpawnpoint.transform.position, Quaternion.identity);
+                StartCoroutine(ShadowTele());
+                CanTeleport = false;
+            }
         }
+        else if (!CanTeleport)
+        {
+
+        }
+        
     }
     private void Invis()//For the Player to go Invis
     {
