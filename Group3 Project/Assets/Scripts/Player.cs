@@ -7,33 +7,53 @@ public class Player : MonoBehaviour
 {
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private Transform BulletSpawnpoint;
+    private Animator Anim;
 
-    //Movement Stuff
+    [Header("Movement Variables")]
     private float horizontal;
     private float vertical;
     private float speed = 8f;
     public bool isFacingRight = true;
 
+    [Header("Gun Variables")]
     public GameObject Bullet;
     public int MaxBullets = 25;
-    public int reloadtime = 10;
+    public float reloadtime = 5.0f;
+    public Slider ReloadBar;
     private bool CanShoot=true;
+    private bool Isreloading = false;
 
+   [Header("Shadow Variables")]
     public GameObject Shadow;
     public GameObject Temp;
     public bool CanTeleport = true;
-    public Image ShadowCDBar;
-    public int ShadowCDTimer = 5;
+    public bool ShadowIsCooldown = false;
+    public Image ShadowCDImg;
+    public Text ShadowCDTxt;//For the CD Txt UI
+    public float ShadowCDTimer = 5.0f;
 
+    [Header("Invis Variables")]
     public SpriteRenderer PlayerSprite;
     public bool CanInvis = true;
+    public bool InvisisOnCD = false;
+    public Image InvisCDImg;
+    public Text InvisCDText;
+    public float InvisCDTimer = 5.0f;
 
-    private Animator Anim;
+
 
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         Anim = GetComponent<Animator>();
+
+        ShadowCDTxt.gameObject.SetActive(false);
+        ShadowCDImg.fillAmount = 0.0f;
+        InvisCDText.gameObject.SetActive(false);
+        InvisCDImg.fillAmount = 0.0f;
+
+        ReloadBar.gameObject.SetActive(false);
+
     }
     void Update()
     {
@@ -42,6 +62,20 @@ public class Player : MonoBehaviour
         Shoot();
         Teleport();
         Invis();
+
+        if (InvisisOnCD == true)
+        {
+            InvisCoolDown();
+        }
+
+        if (ShadowIsCooldown == true)
+        {
+            ShadowTeleCD();
+        }
+        if (Isreloading == true)
+        {
+            Reloading();
+        }
     }
     private void FixedUpdate()
     {
@@ -107,36 +141,83 @@ public class Player : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.R))
         {
             Anim.SetBool("IsReloading", true);
-            StartCoroutine("Reload");
+            Isreloading = true;
         }
         else
         {
             Anim.SetBool("IsReloading", false);
         }
     }
-    IEnumerator Reload()
+    private void Reloading()
     {
-        yield return new WaitForSeconds(5);
-        MaxBullets = 25;
-        CanShoot = true;
+        reloadtime -= Time.deltaTime;
+        if (reloadtime < 0.0f)
+        {
+            MaxBullets = 25;
+            CanShoot = true;
+            ReloadBar.gameObject.SetActive(false);
+            reloadtime = 5.0f;
+            Isreloading = false;
+        }
+        else
+        {
+            ReloadBar.gameObject.SetActive(true);
+            ReloadBar.value = reloadtime;
+        }
+        
     }
-    IEnumerator ShadowTele()
+    IEnumerator ShadowTele()//Function of the Teleportation
     {
-        yield return new WaitForSeconds(ShadowCDTimer);
+        yield return new WaitForSeconds(2);
         gameObject.transform.position = Temp.transform.position;
         Destroy(Temp.gameObject);
-        StartCoroutine(ShadowTeleCD());
+        ShadowIsCooldown = true;
     }
-    IEnumerator ShadowTeleCD()
+    private void ShadowTeleCD()//Cooldown for using the Teleport Ability
     {
+        ShadowCDTimer -=Time.deltaTime;
+        if (ShadowCDTimer < 0.0f)
+        {
+            CanTeleport = true;
+            ShadowIsCooldown = false;
+            ShadowCDTxt.gameObject.SetActive(false);
+            ShadowCDImg.fillAmount = 0.0f;
+            ShadowCDTimer = 5.0f;
+        }
+        else
+        {
+            ShadowCDTxt.gameObject.SetActive(true);
+            ShadowCDTxt.text = Mathf.RoundToInt(ShadowCDTimer).ToString();
+            ShadowCDImg.fillAmount = ShadowCDTimer / ShadowCDTimer;
+        }
 
-        yield return new WaitForSeconds(ShadowCDTimer);
-        CanTeleport = true;
     }
-    IEnumerator InvisCD()
+    IEnumerator InvisDuration()//Duration of the Invis Ability
     {
-        yield return new WaitForSeconds(5);
-        CanInvis = true;
+        yield return new WaitForSeconds(2);
+        PlayerSprite.GetComponent<SpriteRenderer>().material.color = new Color(1f, 1f, 1f, 1f);
+        int layerdef = LayerMask.NameToLayer("Default");
+        gameObject.layer = layerdef;
+        CanInvis = false;
+        InvisisOnCD = true;
+    }
+    private void InvisCoolDown()//Cooldown timer for the Invis Ability
+    {
+        InvisCDTimer -= Time.deltaTime;
+        if (InvisCDTimer < 0.0f)
+        {
+            CanInvis = true;
+            InvisisOnCD = false;
+            InvisCDText.gameObject.SetActive(false);
+            InvisCDImg.fillAmount = 0.0f;
+            InvisCDTimer = 5.0f;
+        }
+        else
+        {
+            InvisCDText.gameObject.SetActive(true);
+            InvisCDText.text = Mathf.RoundToInt(InvisCDTimer).ToString();
+            InvisCDImg.fillAmount = InvisCDTimer / InvisCDTimer;
+        }
     }
     
     private void Teleport()//For Player to Teleport
@@ -150,26 +231,16 @@ public class Player : MonoBehaviour
                 CanTeleport = false;
             }
         }
-        else if (!CanTeleport)
-        {
-
-        }
-        
     }
     private void Invis()//For the Player to go Invis
     {
         if (Input.GetKeyDown(KeyCode.E)&&CanInvis==true)
         {
             PlayerSprite.GetComponent<SpriteRenderer>().material.color = new Color(1f, 1f, 1f, 0.2f);
+            int LayerInvis = LayerMask.NameToLayer("Invis Layer");
+            gameObject.layer = LayerInvis;
+            StartCoroutine(InvisDuration());
+
         }
-        else if (Input.GetKeyUp(KeyCode.E))
-        {
-            PlayerSprite.GetComponent<SpriteRenderer>().material.color = new Color(1f, 1f, 1f, 1f);
-            CanInvis = false;
-            StartCoroutine(InvisCD());
-        }
-        
     }
-
-
 }
