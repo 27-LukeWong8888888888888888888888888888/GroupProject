@@ -2,12 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class Player : MonoBehaviour
 {
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private Transform BulletSpawnpoint;
     private Animator Anim;
+
+    [Header("Health Stuff")]
+    public int Health = 1;
 
     [Header("Movement Variables")]
     private float horizontal;
@@ -22,12 +26,13 @@ public class Player : MonoBehaviour
     public Slider ReloadBar;
     private bool CanShoot=true;
     private bool Isreloading = false;
+    public TMP_Text AmmoTxt;
 
    [Header("Shadow Variables")]
     public GameObject Shadow;
     public GameObject Temp;
-    public bool CanTeleport = true;
-    public bool ShadowIsCooldown = false;
+    public bool CanTeleport = true; 
+    public bool ShadowIsCooldown = false; 
     public Image ShadowCDImg;
     public Text ShadowCDTxt;//For the CD Txt UI
     public float ShadowCDTimer = 5.0f;
@@ -62,7 +67,7 @@ public class Player : MonoBehaviour
         Shoot();
         Teleport();
         Invis();
-
+        Die();
         if (InvisisOnCD == true)
         {
             InvisCoolDown();
@@ -76,6 +81,16 @@ public class Player : MonoBehaviour
         {
             Reloading();
         }
+        AmmoTxt.text = "Ammo: " + MaxBullets + "/25";
+
+
+        // Redundant code to test HP
+        if (Input.GetKeyDown(KeyCode.H))
+        {
+            Health--;
+        }
+        
+
     }
     private void FixedUpdate()
     {
@@ -108,7 +123,6 @@ public class Player : MonoBehaviour
         isFacingRight = !isFacingRight;
         transform.Rotate(0f, 180f, 0);
     }
-
     private void Shoot()
     {
         if (MaxBullets > 0)
@@ -165,7 +179,7 @@ public class Player : MonoBehaviour
             ReloadBar.value = reloadtime;
         }
         
-    }
+    }//Reload Functions
     IEnumerator ShadowTele()//Function of the Teleportation
     {
         yield return new WaitForSeconds(2);
@@ -219,7 +233,6 @@ public class Player : MonoBehaviour
             InvisCDImg.fillAmount = InvisCDTimer / InvisCDTimer;
         }
     }
-    
     private void Teleport()//For Player to Teleport
     {
         if (CanTeleport)
@@ -241,6 +254,15 @@ public class Player : MonoBehaviour
             gameObject.layer = LayerInvis;
             StartCoroutine(InvisDuration());
 
+        }
+    }
+
+    private void Die()
+    {
+        if (Health == 0)
+        {
+            speed = 0f;
+            Anim.SetTrigger("IsDead");
         }
     }
 }
