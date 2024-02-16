@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Enemy1 : MonoBehaviour
 {
+    Animator animator;
     public Rigidbody2D rb;
     public bool PlayerFound = false;
 
@@ -15,6 +16,7 @@ public class Enemy1 : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
         StartCoroutine("StartPatrol");
     }
@@ -109,6 +111,8 @@ public class Enemy1 : MonoBehaviour
             HP--;
             if(HP<= 0)
             {
+                animator.SetTrigger("isDead");
+                
                 Destroy(gameObject);
             }
         }
