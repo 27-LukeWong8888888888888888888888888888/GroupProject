@@ -12459,7 +12459,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 2
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
   m_MaxChunkCount: 16
@@ -13716,7 +13716,7 @@ GameObject:
   - component: {fileID: 801148821}
   - component: {fileID: 801148820}
   - component: {fileID: 801148823}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: walls
   m_TagString: Wall
   m_Icon: {fileID: 0}
@@ -13775,7 +13775,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
   m_MaxChunkCount: 16
@@ -17178,7 +17178,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: -2311659948842064771, guid: 3ff4b98b2981a1741bee51bc0cbc4386,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

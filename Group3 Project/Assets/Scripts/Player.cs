@@ -16,7 +16,7 @@ public class Player : MonoBehaviour
     [Header("Movement Variables")]
     private float horizontal;
     private float vertical;
-    private float speed = 5f;
+    private float speed = 4f;
     public bool isFacingRight = true;
 
     [Header("Gun Variables")]
@@ -182,7 +182,7 @@ public class Player : MonoBehaviour
     }//Reload Functions
     IEnumerator ShadowTele()//Function of the Teleportation
     {
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(1.3f);
         gameObject.transform.position = Temp.transform.position;
         Destroy(Temp.gameObject);
         ShadowIsCooldown = true;

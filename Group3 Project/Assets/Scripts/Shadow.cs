@@ -22,4 +22,13 @@ public class Shadow : MonoBehaviour
             gameObject.transform.Rotate(0, 180, 0);
         }
     }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "Wall")
+        {
+            
+            rb.velocity = Vector2.zero;
+        }
+    }
 }
