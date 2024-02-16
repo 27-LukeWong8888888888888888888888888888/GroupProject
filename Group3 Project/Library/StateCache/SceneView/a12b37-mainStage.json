@@ -1,1 +1,5 @@
+<<<<<<< HEAD
 ﻿{"cameraMode":{"drawMode":0,"name":"Shaded","section":"Shading Mode"},"sceneLighting":true,"audioPlay":false,"sceneViewState":{"showFog":true,"showMaterialUpdate":false,"showSkybox":true,"showFlares":true,"showImageEffects":true,"showParticleSystems":true},"in2DMode":true,"pivot":{"x":455.87109375,"y":180.25234985351563,"z":-119.88345336914063},"rotation":{"x":0.0,"y":0.0,"z":0.0,"w":1.0},"size":461.0400390625,"orthographic":true}
+=======
+﻿{"cameraMode":{"drawMode":0,"name":"Shaded","section":"Shading Mode"},"sceneLighting":true,"audioPlay":false,"sceneViewState":{"showFog":true,"showMaterialUpdate":false,"showSkybox":true,"showFlares":true,"showImageEffects":true,"showParticleSystems":true},"in2DMode":true,"pivot":{"x":0.25995784997940066,"y":0.04310188442468643,"z":-35.942420959472659},"rotation":{"x":0.0,"y":0.0,"z":0.0,"w":1.0},"size":5.729691505432129,"orthographic":true}
+>>>>>>> map-thing
