@@ -22,4 +22,12 @@ public class Bullet : MonoBehaviour
         }
         GameObject.Destroy(gameObject, 2f);
     }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Wall")
+        {
+            Destroy(gameObject);
+        }
+    }
 }

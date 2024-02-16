@@ -16,7 +16,7 @@ public class Player : MonoBehaviour
     [Header("Movement Variables")]
     private float horizontal;
     private float vertical;
-    private float speed = 8f;
+    private float speed = 5f;
     public bool isFacingRight = true;
 
     [Header("Gun Variables")]
