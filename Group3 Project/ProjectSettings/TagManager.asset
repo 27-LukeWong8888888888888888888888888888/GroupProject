@@ -42,6 +42,14 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+<<<<<<< HEAD
   - name: UI
     uniqueID: 4270151171
+=======
+  - name: walls
+    uniqueID: 1215877693
+    locked: 0
+  - name: floor
+    uniqueID: 1465865669
+>>>>>>> map-thing
     locked: 0
