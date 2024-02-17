@@ -113,7 +113,7 @@ public class Enemy1 : MonoBehaviour
             {
                 animator.SetTrigger("isDead");
                 
-                Destroy(gameObject);
+                Destroy(gameObject,3f);
             }
         }
     }
