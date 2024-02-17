@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
@@ -45,7 +46,7 @@ public class Player : MonoBehaviour
     public Text InvisCDText;
     public float InvisCDTimer = 5.0f;
 
-
+    int Keycard;
 
     private void Start()
     {
@@ -263,6 +264,41 @@ public class Player : MonoBehaviour
         {
             speed = 0f;
             Anim.SetTrigger("IsDead");
+        }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if(collision.gameObject.CompareTag("EnemyBullet"))
+        {
+            SceneManager.LoadScene("GameLose");
+        }
+
+        if (collision.gameObject.CompareTag("Keycard"))
+        {
+            Keycard++;
+            Destroy(collision.gameObject);
+
+            if (Keycard >= 4)
+            {
+                Debug.Log("All 4 Keycards are collected.");
+            }
+        }
+
+        
+    }
+
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if(collision.gameObject.CompareTag("Teleporter"))
+        {
+            if(Keycard >=4)
+            {
+                if(Input.GetKeyDown(KeyCode.E))
+                {
+                    SceneManager.LoadScene("BossScene");
+                }
+            }
         }
     }
 }

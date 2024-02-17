@@ -7,6 +7,9 @@ TagManager:
   - Bullet
   - Wall
   - Invis
+  - Enemy
+  - EnemyBullet
+  - Keycard
   layers:
   - Default
   - TransparentFX
