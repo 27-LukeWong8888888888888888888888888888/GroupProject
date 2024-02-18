@@ -8,6 +8,8 @@ TagManager:
   - Wall
   - Invis
   - Lazer
+  - Boss
+  - BossBullet
   layers:
   - Default
   - TransparentFX
