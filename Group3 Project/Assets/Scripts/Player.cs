@@ -68,7 +68,7 @@ public class Player : MonoBehaviour
         Shoot();
         Teleport();
         Invis();
-        Die();
+        
         if (InvisisOnCD == true)
         {
             InvisCoolDown();
@@ -84,14 +84,21 @@ public class Player : MonoBehaviour
         }
         AmmoTxt.text = "Ammo: " + MaxBullets + "/25";
 
-
-        // Redundant code to test HP
-        if (Input.GetKeyDown(KeyCode.H))
-        {
-            Health--;
-        }
+        
+        
         
 
+    }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "Lazer")
+        {
+            StartCoroutine(Die());
+        }
+        else if (collision.gameObject.tag == "BossBullet")
+        {
+            StartCoroutine(Die());
+        }
     }
     private void FixedUpdate()
     {
@@ -258,13 +265,11 @@ public class Player : MonoBehaviour
         }
     }
 
-    private void Die()
+    IEnumerator Die()
     {
-        if (Health == 0)
-        {
-            speed = 0f;
-            Anim.SetTrigger("IsDead");
-        }
+        Anim.SetTrigger("IsDead");
+        yield return new WaitForSeconds(2f);
+        SceneManager.LoadScene("MainMenu");
     }
 
     private void OnCollisionEnter2D(Collision2D collision)

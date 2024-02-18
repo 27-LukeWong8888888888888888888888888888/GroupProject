@@ -7,9 +7,15 @@ TagManager:
   - Bullet
   - Wall
   - Invis
+<<<<<<< HEAD
   - Enemy
   - EnemyBullet
   - Keycard
+=======
+  - Lazer
+  - Boss
+  - BossBullet
+>>>>>>> Boss
   layers:
   - Default
   - TransparentFX

@@ -29,5 +29,10 @@ public class Bullet : MonoBehaviour
         {
             Destroy(gameObject);
         }
+        if (collision.gameObject.tag == "Boss")
+        {
+            BossScript.CurrHP -= 2;
+            Destroy(gameObject);
+        }
     }
 }
