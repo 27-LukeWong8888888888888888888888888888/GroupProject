@@ -109,11 +109,12 @@ public class Enemy1 : MonoBehaviour
         if (collision.gameObject.CompareTag("Bullet"))
         {
             HP--;
+            Destroy(collision.gameObject);
             if(HP<= 0)
             {
                 animator.SetTrigger("isDead");
                 
-                Destroy(gameObject,3f);
+                Destroy(gameObject,0.6f);
             }
         }
     }
