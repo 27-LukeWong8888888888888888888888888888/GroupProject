@@ -9,6 +9,7 @@ public class Enemy1 : MonoBehaviour
     public bool PlayerFound = false;
 
     public GameObject Bullet;
+    public GameObject BulletSpawn;
 
     float speed;
     public int HP;
@@ -35,7 +36,7 @@ public class Enemy1 : MonoBehaviour
 
         while (PlayerFound == true)
         {
-            Instantiate(Bullet, transform.position, Quaternion.identity);
+            Instantiate(Bullet, BulletSpawn.transform.position, Quaternion.identity);
             
             // roll in one of 4 directions (does not work)
             /*float rollDirection = Random.Range(1f, 5f);

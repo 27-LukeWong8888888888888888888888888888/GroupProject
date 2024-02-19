@@ -21241,6 +21241,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 5138246550426134960, guid: 4072d24124b2d7c4ea1b3e624eda418d,
+        type: 3}
+      propertyPath: BulletSpawn
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 5138246550426134961, guid: 4072d24124b2d7c4ea1b3e624eda418d,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -21300,6 +21305,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Enemy Variant (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7778849944123528225, guid: 4072d24124b2d7c4ea1b3e624eda418d,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4072d24124b2d7c4ea1b3e624eda418d, type: 3}
