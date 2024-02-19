@@ -9,8 +9,14 @@ public class Player : MonoBehaviour
 {
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private Transform BulletSpawnpoint;
-    private Animator Anim;
-
+    public Animator Anim;
+    public AudioSource source;
+    public AudioClip invis;
+    public AudioClip ShadowSound;
+    public AudioClip shoot;
+    public AudioClip die;
+    public AudioClip reload;
+    public AudioClip portalspawn;
     [Header("Health Stuff")]
     public int Health = 1;
 
@@ -50,9 +56,16 @@ public class Player : MonoBehaviour
 
     private void Start()
     {
+        AudioSource[] audioSources = GetComponents<AudioSource>();
+        source = audioSources[0];
+        invis = audioSources[0].clip;
+        ShadowSound = audioSources[1].clip;
+        shoot = audioSources[2].clip;
+        die = audioSources[3].clip;
+        reload = audioSources[4].clip;
+        portalspawn = audioSources[5].clip;
         rb = GetComponent<Rigidbody2D>();
         Anim = GetComponent<Animator>();
-
         ShadowCDTxt.gameObject.SetActive(false);
         ShadowCDImg.fillAmount = 0.0f;
         InvisCDText.gameObject.SetActive(false);
@@ -149,6 +162,7 @@ public class Player : MonoBehaviour
                 MaxBullets--;
                 Instantiate(Bullet, BulletSpawnpoint.position, Quaternion.identity);
                 Anim.SetBool("IsShooting", true);
+                source.PlayOneShot(shoot);
             }
             else
             {
@@ -175,6 +189,7 @@ public class Player : MonoBehaviour
         reloadtime -= Time.deltaTime;
         if (reloadtime < 0.0f)
         {
+            source.PlayOneShot(reload);
             MaxBullets = 25;
             CanShoot = true;
             ReloadBar.gameObject.SetActive(false);
@@ -247,6 +262,7 @@ public class Player : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Q))
             {
+                source.PlayOneShot(ShadowSound);
                 Temp = Instantiate(Shadow, BulletSpawnpoint.transform.position, Quaternion.identity);
                 StartCoroutine(ShadowTele());
                 CanTeleport = false;
@@ -257,6 +273,7 @@ public class Player : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.E)&&CanInvis==true)
         {
+            source.PlayOneShot(invis);
             PlayerSprite.GetComponent<SpriteRenderer>().material.color = new Color(1f, 1f, 1f, 0.2f);
             int LayerInvis = LayerMask.NameToLayer("Invis Layer");
             gameObject.layer = LayerInvis;
@@ -267,6 +284,7 @@ public class Player : MonoBehaviour
 
     IEnumerator Die()
     {
+        source.PlayOneShot(die);
         Anim.SetTrigger("IsDead");
         yield return new WaitForSeconds(2f);
         SceneManager.LoadScene("MainMenu");
