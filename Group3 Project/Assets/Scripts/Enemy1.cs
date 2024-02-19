@@ -36,11 +36,7 @@ public class Enemy1 : MonoBehaviour
         while (PlayerFound == true)
         {
             Instantiate(Bullet, transform.position, Quaternion.identity);
-            yield return new WaitForSeconds(0.1f);
-            Instantiate(Bullet, transform.position, Quaternion.identity);
-            yield return new WaitForSeconds(0.1f);
-            Instantiate(Bullet, transform.position, Quaternion.identity);
-            yield return new WaitForSeconds(0.1f);
+            
             // roll in one of 4 directions (does not work)
             /*float rollDirection = Random.Range(1f, 5f);
             if (rollDirection == 1)
@@ -108,7 +104,7 @@ public class Enemy1 : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Bullet"))
         {
-            HP--;
+            hpUpdate();
             Destroy(collision.gameObject);
             if(HP<= 0)
             {
@@ -117,5 +113,10 @@ public class Enemy1 : MonoBehaviour
                 Destroy(gameObject,0.6f);
             }
         }
+    }
+
+    public void hpUpdate()
+    {
+        HP--;
     }
 }

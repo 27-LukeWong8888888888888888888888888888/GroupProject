@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class EnemyBulletMovement : MonoBehaviour
 {
@@ -9,6 +10,8 @@ public class EnemyBulletMovement : MonoBehaviour
     public float speed;
     Transform Player;
     Vector2 direction;
+
+    public Enemy1 enemy1;
     // Start is called before the first frame update
     void Start()
     {
@@ -30,6 +33,11 @@ public class EnemyBulletMovement : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Wall"))
         {
+            Destroy(gameObject);
+        }
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            
             Destroy(gameObject);
         }
     }
