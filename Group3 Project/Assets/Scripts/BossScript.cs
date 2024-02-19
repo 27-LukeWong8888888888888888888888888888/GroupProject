@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class BossScript : MonoBehaviour
 {
@@ -22,13 +23,15 @@ public class BossScript : MonoBehaviour
 
     public GameObject Lazzer;
 
-    public float Bullettimer1;
-    public float Bullettimer2;
+    public float Bullettimer1=0;
+    public float Bullettimer2=0;
     public float lazerTimer;
 
     [SerializeField]
     private bool isAttacking = false;
+    
 
+    public AudioManager audioM;
     void Start()
     {
         CurrHP = 100;
@@ -47,13 +50,13 @@ public class BossScript : MonoBehaviour
         BossHPBar.value = CurrHP;
 
         Bullettimer1 += Time.deltaTime;
-        if (Bullettimer1 >= 2)
+        if (Bullettimer1 >= 3)
         {
             Bullettimer1 = 0;
             shootBullet1();
         }
         Bullettimer2 += Time.deltaTime;
-        if (Bullettimer2 >= 2)
+        if (Bullettimer2 >= 3)
         {
             Bullettimer2 = 0;
             shootbullet2();
@@ -69,6 +72,7 @@ public class BossScript : MonoBehaviour
     }
     void shootBullet1()
     {
+        audioM.Play("BossBulletSFX");
         Instantiate(Bullet, BulletPos1.transform.position, Quaternion.identity);
     }
     void shootbullet2()
@@ -78,6 +82,7 @@ public class BossScript : MonoBehaviour
     }
     IEnumerator shootingLazer()
     {
+        audioM.Play("BossLazerSFX");
         Lazzer.SetActive(true);
         yield return new WaitForSeconds(0.65f);
         isAttacking = true;
@@ -108,8 +113,16 @@ public class BossScript : MonoBehaviour
         }
         else if ((CurrHP == 0))
         {
-            GetComponent<SpriteRenderer>().sprite = State5;
-
+            StartCoroutine(BossDie());
         }
+    }
+    IEnumerator BossDie()
+    {
+        GetComponent<SpriteRenderer>().sprite = State5;
+        isAttacking = true;
+
+        yield return new WaitForSeconds(1.5f);
+        SceneManager.LoadScene("GameWIn");
+
     }
 }

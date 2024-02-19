@@ -8,7 +8,7 @@ public class ButtonUI : MonoBehaviour
     public Animator UIAnim;
     public void StartGame()
     {
-        //Not Set yet 
+        SceneManager.LoadScene("GameScene");
     }
     public void QuitGame()
     {
@@ -25,5 +25,13 @@ public class ButtonUI : MonoBehaviour
     public void Credits()
     {
         UIAnim.SetTrigger("Credits");
+    }
+    public void Retry()
+    {
+        SceneManager.LoadScene("GameScene");
+    }
+   public void MainMenu()
+    {
+        SceneManager.LoadScene("MainMenuScene");
     }
 }

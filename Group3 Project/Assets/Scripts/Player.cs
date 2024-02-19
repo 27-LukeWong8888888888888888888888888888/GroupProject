@@ -9,14 +9,10 @@ public class Player : MonoBehaviour
 {
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private Transform BulletSpawnpoint;
+    public GameObject DoorToNxtLvl;
     public Animator Anim;
-    public AudioSource source;
-    public AudioClip invis;
-    public AudioClip ShadowSound;
-    public AudioClip shoot;
-    public AudioClip die;
-    public AudioClip reload;
-    public AudioClip portalspawn;
+
+    public AudioManager AM;
     [Header("Health Stuff")]
     public int Health = 1;
 
@@ -52,18 +48,14 @@ public class Player : MonoBehaviour
     public Text InvisCDText;
     public float InvisCDTimer = 5.0f;
 
-    int Keycard;
+    [Header("Keycard Stuff")]
+
+
+    private int KeycardCount;
+
 
     private void Start()
     {
-        AudioSource[] audioSources = GetComponents<AudioSource>();
-        source = audioSources[0];
-        invis = audioSources[0].clip;
-        ShadowSound = audioSources[1].clip;
-        shoot = audioSources[2].clip;
-        die = audioSources[3].clip;
-        reload = audioSources[4].clip;
-        portalspawn = audioSources[5].clip;
         rb = GetComponent<Rigidbody2D>();
         Anim = GetComponent<Animator>();
         ShadowCDTxt.gameObject.SetActive(false);
@@ -72,7 +64,7 @@ public class Player : MonoBehaviour
         InvisCDImg.fillAmount = 0.0f;
 
         ReloadBar.gameObject.SetActive(false);
-
+        DoorToNxtLvl.gameObject.SetActive(false);
     }
     void Update()
     {
@@ -97,22 +89,15 @@ public class Player : MonoBehaviour
         }
         AmmoTxt.text = "Ammo: " + MaxBullets + "/25";
 
-        
-        
-        
+
+        if (KeycardCount == 4)
+        {
+            DoorToNxtLvl.gameObject.SetActive(true);
+        }
+
 
     }
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.gameObject.tag == "Lazer")
-        {
-            StartCoroutine(Die());
-        }
-        else if (collision.gameObject.tag == "BossBullet")
-        {
-            StartCoroutine(Die());
-        }
-    }
+    
     private void FixedUpdate()
     {
         rb.velocity = new Vector2(horizontal * speed, vertical * speed);
@@ -162,7 +147,7 @@ public class Player : MonoBehaviour
                 MaxBullets--;
                 Instantiate(Bullet, BulletSpawnpoint.position, Quaternion.identity);
                 Anim.SetBool("IsShooting", true);
-                source.PlayOneShot(shoot);
+                AM.Play("PlayerShooting");
             }
             else
             {
@@ -189,7 +174,7 @@ public class Player : MonoBehaviour
         reloadtime -= Time.deltaTime;
         if (reloadtime < 0.0f)
         {
-            source.PlayOneShot(reload);
+            AM.Play("PlayerReloading");
             MaxBullets = 25;
             CanShoot = true;
             ReloadBar.gameObject.SetActive(false);
@@ -262,7 +247,7 @@ public class Player : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Q))
             {
-                source.PlayOneShot(ShadowSound);
+                //AudioManager.source.PlayOneShot(ShadowSound);
                 Temp = Instantiate(Shadow, BulletSpawnpoint.transform.position, Quaternion.identity);
                 StartCoroutine(ShadowTele());
                 CanTeleport = false;
@@ -273,7 +258,7 @@ public class Player : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.E)&&CanInvis==true)
         {
-            source.PlayOneShot(invis);
+            AM.Play("InvisSkill");
             PlayerSprite.GetComponent<SpriteRenderer>().material.color = new Color(1f, 1f, 1f, 0.2f);
             int LayerInvis = LayerMask.NameToLayer("Invis Layer");
             gameObject.layer = LayerInvis;
@@ -284,43 +269,44 @@ public class Player : MonoBehaviour
 
     IEnumerator Die()
     {
-        source.PlayOneShot(die);
+        AM.Play("Damaged");
         Anim.SetTrigger("IsDead");
         yield return new WaitForSeconds(2f);
-        SceneManager.LoadScene("MainMenu");
+
+        SceneManager.LoadScene("GameLose");
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if(collision.gameObject.CompareTag("EnemyBullet"))
+        if (collision.gameObject.tag == "EnemyBullet") 
         {
-            SceneManager.LoadScene("GameLose");
-        }
-
-        if (collision.gameObject.CompareTag("Keycard"))
-        {
-            Keycard++;
-            Destroy(collision.gameObject);
-
-            if (Keycard >= 4)
-            {
-                Debug.Log("All 4 Keycards are collected.");
-            }
-        }
-
-        
+            StartCoroutine(Die());
+        }   
     }
-
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "Lazer")
+        {
+            StartCoroutine(Die());
+        }
+        else if (collision.gameObject.tag == "BossBullet")
+        {
+            StartCoroutine(Die());
+        }
+        if (collision.gameObject.tag == "KeyCard")
+        {
+            KeycardCount++;
+            Destroy(collision.gameObject);
+        }
+    }
     private void OnTriggerStay2D(Collider2D collision)
     {
-        if(collision.gameObject.CompareTag("Teleporter"))
+        if (collision.gameObject.tag == "Teleporter") 
         {
-            if(Keycard >=4)
+            if(KeycardCount >=4)
             {
-                if(Input.GetKeyDown(KeyCode.E))
-                {
                     SceneManager.LoadScene("BossScene");
-                }
+                
             }
         }
     }

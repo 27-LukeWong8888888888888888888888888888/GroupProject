@@ -67,6 +67,10 @@ public class Enemy1 : MonoBehaviour
             PlayerFound = true;
             
         }
+        else
+        {
+            PlayerFound = false;
+        }
     }
 
     public void OnTriggerStay2D(Collider2D collision)
