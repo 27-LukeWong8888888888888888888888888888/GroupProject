@@ -25,7 +25,7 @@ public class Player : MonoBehaviour
     [Header("Gun Variables")]
     public GameObject Bullet;
     public int MaxBullets = 25;
-    public float reloadtime = 5.0f;
+    public float reloadtime = 2.5f;
     public Slider ReloadBar;
     private bool CanShoot=true;
     private bool Isreloading = false;
@@ -87,6 +87,7 @@ public class Player : MonoBehaviour
         {
             Reloading();
         }
+       
         AmmoTxt.text = "Ammo: " + MaxBullets + "/25";
 
 
@@ -95,7 +96,7 @@ public class Player : MonoBehaviour
             DoorToNxtLvl.gameObject.SetActive(true);
         }
 
-
+       
     }
     
     private void FixedUpdate()
@@ -131,7 +132,8 @@ public class Player : MonoBehaviour
     }
     private void Shoot()
     {
-        if (MaxBullets > 0)
+
+        if (MaxBullets > 0 && Isreloading == false)
         {
             CanShoot = true;
         }
@@ -166,23 +168,25 @@ public class Player : MonoBehaviour
         }
         else
         {
+            CanShoot = true;
             Anim.SetBool("IsReloading", false);
         }
     }
     private void Reloading()
     {
         reloadtime -= Time.deltaTime;
-        if (reloadtime < 0.0f)
+        if (reloadtime <= 0.0f)
         {
             AM.Play("PlayerReloading");
             MaxBullets = 25;
             CanShoot = true;
             ReloadBar.gameObject.SetActive(false);
-            reloadtime = 5.0f;
+            reloadtime = 2.5f;
             Isreloading = false;
         }
         else
         {
+            CanShoot = false;
             ReloadBar.gameObject.SetActive(true);
             ReloadBar.value = reloadtime;
         }
@@ -269,6 +273,7 @@ public class Player : MonoBehaviour
 
     IEnumerator Die()
     {
+        speed = 0;
         AM.Play("Damaged");
         Anim.SetTrigger("IsDead");
         yield return new WaitForSeconds(2f);
